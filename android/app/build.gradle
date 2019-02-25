@@ -93,19 +93,6 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
-import com.android.build.gradle.internal.pipeline.TransformTask
-
-def deleteDuplicateJniFiles() {
-    def files = fileTree("${buildDir}/intermediates/exploded-aar/com.facebook.react/react-native/0.58.5/jni/") {
-        include "**/libgnustl_shared.so"
-    }
-    files.each { it.delete() }
-}
-
-tasks.withType(TransformTask) { pkgTask ->
-    pkgTask.doFirst { deleteDuplicateJniFiles() }
-}
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion

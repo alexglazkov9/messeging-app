@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "react": "16.6.3",
-    "react-native": "0.58.5",
+    "react-native": "^0.58.5",
+    "react-native-cli": "^2.0.1",
     "react-native-mailcore": "0.0.3"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@
  */
 
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, TextInput, View, Button } from "react-native";
 import MailCore from "react-native-mailcore";
 
 // MailCore.sendMail({
@@ -43,16 +43,65 @@ const instructions = Platform.select({
     "Shake or press menu button for dev menu"
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      from: '',
+      password: '',
+      to: '',
+      message: ''
+    };
+    this.send = this.send.bind(this);
+  }
+
+  send(){
+    alert("In");
+    MailCore.sendMail({
+      hostname: "smtp.gmail.com",
+      port: 465,
+      username: this.state.from,
+      password: this.state.password,
+      from: {
+        addressWithDisplayName: "From Label",
+        mailbox: this.state.from
+      },
+      to: {
+        addressWithDisplayName: "To Label",
+        mailbox: this.state.to
+      },
+      subject: "Testing RN MailCore" + new Date(),
+      htmlBody: this.state.message
+      })
+      .then(result => {
+        alert(result.status);
+      })
+      .catch(error => {
+        alert(error);
+    });
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js еуеы
-        </Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <TextInput 
+          onChangeText={(text) => this.setState({from: text})}
+          value={this.state.from}
+          placeholder="From"/>
+        <TextInput 
+          onChangeText={(text) => this.setState({password: text})}
+          value={this.state.password}
+          placeholder="Password"/>
+        <TextInput 
+          onChangeText={(text) => this.setState({to: text})}
+          value={this.state.to}
+          placeholder="To"/>
+        <TextInput 
+          onChangeText={(text) => this.setState({message: text})}
+          value={this.state.message}
+          placeholder="Message"/>
+        <Button
+          onPress={this.send}
+          title="Send">Send</Button>
       </View>
     );
   }
